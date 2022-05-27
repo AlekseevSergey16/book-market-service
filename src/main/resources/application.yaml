@@ -1,0 +1,10 @@
+server:
+  servlet:
+    context-path: /book-market/api
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/book_market
+    username: postgres
+    password:
