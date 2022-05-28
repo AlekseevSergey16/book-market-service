@@ -12,6 +12,7 @@ public interface BookRepository {
     void delete(long id);
 
     List<Book> findAll();
+    List<Book> findByAuthorId(long authorId);
     List<Book> findByGenreId(long genreId);
 
 }

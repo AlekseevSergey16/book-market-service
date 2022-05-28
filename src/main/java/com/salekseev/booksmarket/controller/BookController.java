@@ -5,6 +5,7 @@ import com.salekseev.booksmarket.service.BookService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/books")
@@ -32,8 +33,17 @@ public class BookController {
     }
 
     @GetMapping("/search")
-    public List<Book> getBooksByGenre(@RequestParam long genreId) {
-        return bookService.getBooksByGenreId(genreId);
+    public List<Book> getBooksBy(@RequestParam Optional<Long> genreId,
+                                  @RequestParam Optional<Long> authorId) {
+        if (genreId.isEmpty() && authorId.isEmpty() || genreId.isPresent() && authorId.isPresent()) {
+            throw new RuntimeException();
+        }
+
+        if (genreId.isPresent()) {
+            return bookService.getBooksByGenreId(genreId.get());
+        }
+
+        return bookService.getBooksByAuthorId(authorId.get());
     }
 
     @PutMapping

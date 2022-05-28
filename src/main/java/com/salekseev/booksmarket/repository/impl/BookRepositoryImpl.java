@@ -85,6 +85,34 @@ class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
+    public List<Book> findByAuthorId(long authorId) {
+        var sql = """
+                SELECT book.id,
+                       book.title,
+                       book.description,
+                       book.publication_year,
+                       book.cost,
+                       book.pages,
+                       book.weight,
+                       book.publisher_id,
+                       genre.id              AS genre_id,
+                       genre.name            AS genre_name,
+                       publisher.id          AS publisher_id,
+                       publisher.name        AS publisher_name,
+                       publisher.phone       AS publisher_phone,
+                       publisher.email       AS publisher_email,
+                       publisher.information AS publisher_information
+                FROM book
+                       INNER JOIN genre ON genre.id = book.genre_id
+                       INNER JOIN publisher ON publisher.id = book.publisher_id
+                       INNER JOIN book_author ba on book.id = ba.book_id
+                WHERE ba.author_id = ?;
+                """;
+
+        return jdbcTemplate.getJdbcOperations().query(sql, this::bookMapper, authorId);
+    }
+
+    @Override
     public List<Book> findByGenreId(long genreId) {
         var sql = """
                 SELECT book.id,
@@ -135,6 +163,7 @@ class BookRepositoryImpl implements BookRepository {
                 .addValue("genreId", book.getGenre().getId());
 
         jdbcTemplate.update(sql, params);
+        //todo update list authors
     }
 
     @Transactional
