@@ -12,6 +12,7 @@ public class Shipment {
 
     private Long id;
     private LocalDate shipmentDate;
+    private Supplier supplier;
     private List<ShipmentItem> items;
     private Integer totalAmount;
 

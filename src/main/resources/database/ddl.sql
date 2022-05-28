@@ -65,7 +65,9 @@ create table shipment (
 CREATE TABLE shipment (
     id bigserial primary key,
     shipment_date date,
-    totalAmount int
+    supplier_id int,
+    totalAmount int,
+    foreign key (supplier_id) references supplier (id)
 );
 
 create table shipment_item (
@@ -76,6 +78,11 @@ create table shipment_item (
     UNIQUE (shipment_id, book_id),
     foreign key (shipment_id) references shipment (id),
     foreign key (book_id) references book (id)
+);
+
+create table supplier (
+    id bigserial primary key,
+    name varchar(255)
 );
 
 CREATE TABLE storage (

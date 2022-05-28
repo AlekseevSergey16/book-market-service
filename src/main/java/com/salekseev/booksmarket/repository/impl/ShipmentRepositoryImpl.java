@@ -24,12 +24,13 @@ class ShipmentRepositoryImpl implements ShipmentRepository {
     @Override
     public long save(Shipment shipment) {
         var sql = """
-                INSERT INTO shipment (shipment_date, total_amount)
-                VALUES (:shipmentDate, :totalAmount);
+                INSERT INTO shipment (shipment_date, total_amount, supplier_id)
+                VALUES (:shipmentDate, :totalAmount, :supplierId);
                 """;
         var params = new MapSqlParameterSource()
                 .addValue("shipmentDate", shipment.getShipmentDate())
-                .addValue("totalAmount", shipment.getTotalAmount());
+                .addValue("totalAmount", shipment.getTotalAmount())
+                .addValue("supplierId", shipment.getSupplier().getId());
 
         var keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, params, keyHolder);
