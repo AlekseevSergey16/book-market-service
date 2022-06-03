@@ -7,7 +7,9 @@ import com.salekseev.booksmarket.repository.BookRepository;
 import com.salekseev.booksmarket.service.BookService;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 class BookServiceImpl implements BookService {
@@ -27,6 +29,21 @@ class BookServiceImpl implements BookService {
 
     @Override
     public void updateBook(Book book) {
+//        List<Author> authors = authorRepository.findByBookId(book.getId());
+//        List<Long> dbAuthorIds = authors
+//                .parallelStream()
+//                .map(Author::getId)
+//                .toList();
+//
+//        List<Long> bookAuthorIds = book.getAuthors()
+//                .parallelStream()
+//                .map(Author::getId)
+//                .toList();
+//
+//        Set<Long> authorIdSet = new HashSet<>();
+//        authorIdSet.addAll(dbAuthorIds);
+//        authorIdSet.addAll(bookAuthorIds);
+
         bookRepository.update(book);
     }
 
@@ -67,6 +84,17 @@ class BookServiceImpl implements BookService {
     @Override
     public List<Book> getBooksByGenreId(long genreId) {
         return bookRepository.findByGenreId(genreId);
+    }
+
+    @Override
+    public List<Book> getAvailabilityBooks() {
+        List<Book> books = bookRepository.findAllByAmountNotNull();
+
+        for (Book book : books) {
+            book.setAuthors(authorRepository.findByBookId(book.getId()));
+        }
+
+        return books;
     }
 
 }

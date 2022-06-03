@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -48,8 +49,11 @@ class ShipmentRepositoryImpl implements ShipmentRepository {
         var sql = """
                 SELECT shipment.id,
                        shipment.shipment_date,
-                       shipment.total_amount
-                FROM shipment;
+                       shipment.total_amount,
+                       supplier.id             AS supplier_id,
+                       supplier.name           AS supplier_name
+                FROM shipment
+                    INNER JOIN supplier ON supplier.id = shipment.supplier_id;
                 """;
 
         return jdbcTemplate.query(sql, this::shipmentMapper);
@@ -60,6 +64,10 @@ class ShipmentRepositoryImpl implements ShipmentRepository {
                 .id(rs.getLong("id"))
                 .shipmentDate(rs.getDate("shipment_date").toLocalDate())
                 .totalAmount(rs.getInt("total_amount"))
+                .supplier(Supplier.builder()
+                        .id(rs.getLong("supplier_id"))
+                        .name(rs.getString("supplier_name"))
+                        .build())
                 .build();
     }
 

@@ -20,5 +20,6 @@ public class Book {
     private Double cost;
     private Integer pages;
     private Integer weight;
+    private Integer amount;
 
 }

@@ -2,6 +2,7 @@ package com.salekseev.booksmarket.repository.impl;
 
 import com.salekseev.booksmarket.model.*;
 import com.salekseev.booksmarket.repository.OrderItemRepository;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
@@ -20,7 +21,20 @@ class OrderItemRepositoryImpl implements OrderItemRepository {
 
     @Override
     public void saveAll(long orderId, List<OrderItem> items) {
+        var itemSql = """
+                INSERT INTO order_item (order_id, book_id, quantity)
+                VALUES (:orderId, :bookId, :quantity);
+                """;
+        var params = new MapSqlParameterSource[items.size()];
 
+        for (int i = 0; i < items.size(); i++) {
+            params[i] = new MapSqlParameterSource()
+                    .addValue("orderId", orderId)
+                    .addValue("bookId", items.get(i).getBook().getId())
+                    .addValue("quantity", items.get(i).getQuantity());
+        }
+
+        jdbcTemplate.batchUpdate(itemSql, params);
     }
 
     @Override
@@ -51,7 +65,7 @@ class OrderItemRepositoryImpl implements OrderItemRepository {
                     INNER JOIN book ON book.id = item.book_id
                     INNER JOIN genre ON genre.id = book.genre_id
                     INNER JOIN publisher ON publisher.id = book.publisher_id
-                WHERE order_id = ?;
+                WHERE item.order_id = ?;
                 """;
 
         return jdbcTemplate.getJdbcOperations().query(sql, this::orderMapper, orderId);

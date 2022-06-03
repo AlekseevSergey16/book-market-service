@@ -2,10 +2,7 @@ package com.salekseev.booksmarket.controller;
 
 import com.salekseev.booksmarket.model.Supplier;
 import com.salekseev.booksmarket.service.SupplierService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ public class SupplierController {
     }
 
     @PostMapping
-    public long createSupplier(Supplier supplier) {
+    public long createSupplier(@RequestBody Supplier supplier) {
         return supplierService.addSupplier(supplier);
     }
 

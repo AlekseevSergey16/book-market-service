@@ -68,7 +68,7 @@ class BookRepositoryImpl implements BookRepository {
                        book.cost,
                        book.pages,
                        book.weight,
-                       book.publisher_id,
+                       book.amount,
                        genre.id              AS genre_id,
                        genre.name            AS genre_name,
                        publisher.id          AS publisher_id,
@@ -94,7 +94,7 @@ class BookRepositoryImpl implements BookRepository {
                        book.cost,
                        book.pages,
                        book.weight,
-                       book.publisher_id,
+                       book.amount,
                        genre.id              AS genre_id,
                        genre.name            AS genre_name,
                        publisher.id          AS publisher_id,
@@ -122,7 +122,7 @@ class BookRepositoryImpl implements BookRepository {
                        book.cost,
                        book.pages,
                        book.weight,
-                       book.publisher_id,
+                       book.amount,
                        genre.id              AS genre_id,
                        genre.name            AS genre_name,
                        publisher.id          AS publisher_id,
@@ -137,6 +137,34 @@ class BookRepositoryImpl implements BookRepository {
                 """;
 
         return jdbcTemplate.getJdbcOperations().query(sql, this::bookMapper, genreId);
+    }
+
+    @Override
+    public List<Book> findAllByAmountNotNull() {
+        var sql = """
+                SELECT book.id,
+                       book.title,
+                       book.description,
+                       book.publication_year,
+                       book.cost,
+                       book.pages,
+                       book.weight,
+                       book.amount,
+                       genre.id              AS genre_id,
+                       genre.name            AS genre_name,
+                       publisher.id          AS publisher_id,
+                       publisher.name        AS publisher_name,
+                       publisher.phone       AS publisher_phone,
+                       publisher.email       AS publisher_email,
+                       publisher.information AS publisher_information
+                FROM book
+                       INNER JOIN genre ON genre.id = book.genre_id
+                       INNER JOIN publisher ON publisher.id = book.publisher_id
+                WHERE book.amount > 0
+                ORDER BY book.id DESC;
+                """;
+
+        return jdbcTemplate.getJdbcOperations().query(sql, this::bookMapper);
     }
 
     @Override
@@ -163,6 +191,7 @@ class BookRepositoryImpl implements BookRepository {
                 .addValue("genreId", book.getGenre().getId());
 
         jdbcTemplate.update(sql, params);
+
         //todo update list authors
     }
 
@@ -184,6 +213,28 @@ class BookRepositoryImpl implements BookRepository {
         jdbcTemplate.getJdbcOperations().update(sql2, id);
     }
 
+    @Override
+    public void increaseAmount(long id, long amount) {
+        var sql = """
+                UPDATE book
+                SET amount = (amount + ?)
+                WHERE book.id = ?;
+                """;
+
+        jdbcTemplate.getJdbcOperations().update(sql, amount, id);
+    }
+
+    @Override
+    public void reduceAmount(long id, long amount) {
+        var sql = """
+                UPDATE book
+                SET amount = (amount - ?)
+                WHERE book.id = ?;
+                """;
+
+        jdbcTemplate.getJdbcOperations().update(sql, amount, id);
+    }
+
     private Book bookMapper(ResultSet rs, int rowNum) throws SQLException {
         return Book.builder()
                 .id(rs.getLong("id"))
@@ -193,6 +244,7 @@ class BookRepositoryImpl implements BookRepository {
                 .cost(rs.getDouble("cost"))
                 .pages(rs.getInt("pages"))
                 .weight(rs.getInt("weight"))
+                .amount(rs.getInt("amount"))
                 .genre(Genre.builder()
                         .id(rs.getLong("genre_id"))
                         .name(rs.getString("genre_name"))

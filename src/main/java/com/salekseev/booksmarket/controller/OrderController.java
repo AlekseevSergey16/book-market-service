@@ -2,10 +2,7 @@ package com.salekseev.booksmarket.controller;
 
 import com.salekseev.booksmarket.model.Order;
 import com.salekseev.booksmarket.service.OrderService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,7 +17,7 @@ public class OrderController {
     }
 
     @PostMapping
-    public long createOrder(Order order) {
+    public long createOrder(@RequestBody Order order) {
         return orderService.addOrder(order);
     }
 

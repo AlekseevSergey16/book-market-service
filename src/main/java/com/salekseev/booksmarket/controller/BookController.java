@@ -34,13 +34,19 @@ public class BookController {
 
     @GetMapping("/search")
     public List<Book> getBooksBy(@RequestParam Optional<Long> genreId,
-                                  @RequestParam Optional<Long> authorId) {
-        if (genreId.isEmpty() && authorId.isEmpty() || genreId.isPresent() && authorId.isPresent()) {
+                                 @RequestParam Optional<Long> authorId,
+                                 @RequestParam Optional<Boolean> availability) {
+        if ((genreId.isEmpty() && authorId.isEmpty() && availability.isEmpty())
+                || (genreId.isPresent() && authorId.isPresent() && availability.isPresent())) {
             throw new RuntimeException();
         }
 
         if (genreId.isPresent()) {
             return bookService.getBooksByGenreId(genreId.get());
+        }
+
+        if (availability.isPresent()) {
+            return bookService.getAvailabilityBooks();
         }
 
         return bookService.getBooksByAuthorId(authorId.get());

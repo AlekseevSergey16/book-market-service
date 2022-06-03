@@ -14,5 +14,6 @@ public interface BookService {
     List<Book> getBooks();
     List<Book> getBooksByAuthorId(long authorId);
     List<Book> getBooksByGenreId(long genreId);
+    List<Book> getAvailabilityBooks();
 
 }
