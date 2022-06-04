@@ -1,25 +1,26 @@
 package com.salekseev.booksmarket.service.impl;
 
-import com.salekseev.booksmarket.model.Author;
+import com.salekseev.booksmarket.exception.BadRequestException;
 import com.salekseev.booksmarket.model.Book;
 import com.salekseev.booksmarket.repository.AuthorRepository;
 import com.salekseev.booksmarket.repository.BookRepository;
+import com.salekseev.booksmarket.repository.ShipmentItemRepository;
 import com.salekseev.booksmarket.service.BookService;
 import org.springframework.stereotype.Service;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Service
 class BookServiceImpl implements BookService {
 
     private final BookRepository bookRepository;
     private final AuthorRepository authorRepository;
+    private final ShipmentItemRepository shipmentItemRepository;
 
-    BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository) {
+    BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, ShipmentItemRepository shipmentItemRepository) {
         this.bookRepository = bookRepository;
         this.authorRepository = authorRepository;
+        this.shipmentItemRepository = shipmentItemRepository;
     }
 
     @Override
@@ -29,26 +30,14 @@ class BookServiceImpl implements BookService {
 
     @Override
     public void updateBook(Book book) {
-//        List<Author> authors = authorRepository.findByBookId(book.getId());
-//        List<Long> dbAuthorIds = authors
-//                .parallelStream()
-//                .map(Author::getId)
-//                .toList();
-//
-//        List<Long> bookAuthorIds = book.getAuthors()
-//                .parallelStream()
-//                .map(Author::getId)
-//                .toList();
-//
-//        Set<Long> authorIdSet = new HashSet<>();
-//        authorIdSet.addAll(dbAuthorIds);
-//        authorIdSet.addAll(bookAuthorIds);
-
         bookRepository.update(book);
     }
 
     @Override
     public void removeBook(long id) {
+        if (shipmentItemRepository.checkExistByBookId(id)) {
+            throw new BadRequestException("Невозможно удалить книгу");
+        }
         bookRepository.delete(id);
     }
 

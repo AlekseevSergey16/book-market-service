@@ -74,6 +74,19 @@ class ShipmentItemRepositoryImpl implements ShipmentItemRepository {
         return jdbcTemplate.getJdbcOperations().query(sql, this::shipmentItemMapper, shipmentId);
     }
 
+    @Override
+    public boolean checkExistByBookId(long bookId) {
+        var sql = """
+                SELECT item.id
+                FROM shipment_item item
+                WHERE item.book_id = ?;
+                """;
+
+        return !jdbcTemplate.getJdbcOperations()
+                .query(sql, (rs, rowNum) -> rs.getLong("id"), bookId)
+                .isEmpty();
+    }
+
     private ShipmentItem shipmentItemMapper(ResultSet rs, int rowNum) throws SQLException {
         return ShipmentItem.builder()
                 .id(rs.getLong("id"))

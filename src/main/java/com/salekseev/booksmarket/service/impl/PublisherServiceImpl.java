@@ -1,6 +1,8 @@
 package com.salekseev.booksmarket.service.impl;
 
+import com.salekseev.booksmarket.exception.BadRequestException;
 import com.salekseev.booksmarket.model.Publisher;
+import com.salekseev.booksmarket.repository.BookRepository;
 import com.salekseev.booksmarket.repository.PublisherRepository;
 import com.salekseev.booksmarket.service.PublisherService;
 import org.springframework.stereotype.Service;
@@ -11,9 +13,11 @@ import java.util.List;
 class PublisherServiceImpl implements PublisherService {
 
     private final PublisherRepository publisherRepository;
+    private final BookRepository bookRepository;
 
-    PublisherServiceImpl(PublisherRepository publisherRepository) {
+    PublisherServiceImpl(PublisherRepository publisherRepository, BookRepository bookRepository) {
         this.publisherRepository = publisherRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -39,6 +43,9 @@ class PublisherServiceImpl implements PublisherService {
 
     @Override
     public void deletePublisher(long id) {
+        if (bookRepository.checkExistByPublisherId(id)) {
+            throw new BadRequestException("Удаление издательства, у которых имеются книги - невозможно.");
+        }
         publisherRepository.delete(id);
     }
 

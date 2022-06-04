@@ -8,5 +8,6 @@ public interface ShipmentItemRepository {
 
     void saveAll(long shipmentId, List<ShipmentItem> items);
     List<ShipmentItem> findByShipmentId(long shipmentId);
+    boolean checkExistByBookId(long bookId);
 
 }

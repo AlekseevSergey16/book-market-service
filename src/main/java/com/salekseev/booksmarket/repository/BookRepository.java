@@ -18,4 +18,6 @@ public interface BookRepository {
     List<Book> findByGenreId(long genreId);
     List<Book> findAllByAmountNotNull();
 
+    boolean checkExistByPublisherId(long publisherId);
+
 }

@@ -1,7 +1,9 @@
 package com.salekseev.booksmarket.service.impl;
 
+import com.salekseev.booksmarket.exception.BadRequestException;
 import com.salekseev.booksmarket.model.Author;
 import com.salekseev.booksmarket.repository.AuthorRepository;
+import com.salekseev.booksmarket.repository.BookRepository;
 import com.salekseev.booksmarket.service.AuthorService;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,11 @@ import java.util.List;
 class AuthorServiceImpl implements AuthorService {
 
     private final AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
 
-    AuthorServiceImpl(AuthorRepository authorRepository) {
+    AuthorServiceImpl(AuthorRepository authorRepository, BookRepository bookRepository) {
         this.authorRepository = authorRepository;
+        this.bookRepository = bookRepository;
     }
 
     @Override
@@ -28,6 +32,10 @@ class AuthorServiceImpl implements AuthorService {
 
     @Override
     public void deleteAuthor(long id) {
+        //todo create method check
+        if (!bookRepository.findByAuthorId(id).isEmpty()) {
+            throw new BadRequestException("Удаление автора, у которого имеются книги - невозможно.");
+        }
         authorRepository.delete(id);
     }
 

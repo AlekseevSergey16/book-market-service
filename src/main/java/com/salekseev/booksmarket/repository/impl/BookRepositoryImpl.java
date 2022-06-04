@@ -5,6 +5,7 @@ import com.salekseev.booksmarket.model.Book;
 import com.salekseev.booksmarket.model.Genre;
 import com.salekseev.booksmarket.model.Publisher;
 import com.salekseev.booksmarket.repository.BookRepository;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -168,6 +169,19 @@ class BookRepositoryImpl implements BookRepository {
     }
 
     @Override
+    public boolean checkExistByPublisherId(long publisherId) {
+        var sql = """
+                SELECT book.id, book.publisher_id
+                FROM book
+                WHERE book.publisher_id = ?;
+                """;
+
+        RowMapper<Long> mapper = (rs, rowNum) -> rs.getLong("id");
+
+        return !jdbcTemplate.getJdbcOperations().query(sql, mapper, publisherId).isEmpty();
+    }
+
+    @Override
     public void update(Book book) {
         var sql = """
                 UPDATE book
@@ -177,7 +191,8 @@ class BookRepositoryImpl implements BookRepository {
                     cost = :cost,
                     pages = :pages,
                     weight = :weight,
-                    genre_id = :genreId
+                    genre_id = :genreId,
+                    publisher_id = :publisherId
                 WHERE book.id = :id;
                 """;
         var params = new MapSqlParameterSource()
@@ -188,7 +203,8 @@ class BookRepositoryImpl implements BookRepository {
                 .addValue("cost", book.getCost())
                 .addValue("pages", book.getPages())
                 .addValue("weight", book.getWeight())
-                .addValue("genreId", book.getGenre().getId());
+                .addValue("genreId", book.getGenre().getId())
+                .addValue("publisherId", book.getPublisher().getId());
 
         jdbcTemplate.update(sql, params);
 
