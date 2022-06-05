@@ -61,4 +61,21 @@ class OrderServiceImpl implements OrderService {
 
         return orders;
     }
+
+    @Override
+    public List<Order> getOrdersByUserId(long userId) {
+        List<Order> orders = orderRepository.findByUserId(userId);
+
+        orders.forEach(order -> {
+            long orderId = order.getId();
+            List<OrderItem> orderItems = orderItemRepository.findByOrderId(orderId);
+            order.setItems(orderItems);
+            for (OrderItem orderItem : order.getItems()) {
+                long bookId = orderItem.getBook().getId();
+                orderItem.getBook().setAuthors(authorRepository.findByBookId(bookId));
+            }
+        });
+
+        return orders;
+    }
 }

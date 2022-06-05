@@ -23,13 +23,14 @@ class OrderRepositoryImpl implements OrderRepository {
     @Override
     public long save(Order order) {
         var sql = """
-                INSERT INTO orders (order_date, total_cost)
-                VALUES (:orderDate, :totalCost);
+                INSERT INTO orders (order_date, total_cost, user_id)
+                VALUES (:orderDate, :totalCost, :userId);
                 """;
 
         var params = new MapSqlParameterSource()
                 .addValue("orderDate", order.getOrderDate())
-                .addValue("totalCost", order.getTotalCost());
+                .addValue("totalCost", order.getTotalCost())
+                .addValue("userId", order.getUserId());
 
         var keyHolder = new GeneratedKeyHolder();
 
@@ -47,6 +48,18 @@ class OrderRepositoryImpl implements OrderRepository {
                 FROM orders;
                 """;
         return jdbcTemplate.query(sql, this::orderMapper);
+    }
+
+    @Override
+    public List<Order> findByUserId(long userId) {
+        var sql = """
+                SELECT orders.id,
+                       orders.order_date,
+                       orders.total_cost
+                FROM orders
+                WHERE user_id = ?
+                """;
+        return jdbcTemplate.getJdbcOperations().query(sql, this::orderMapper, userId);
     }
 
     private Order orderMapper(ResultSet rs, int rowNum) throws SQLException {

@@ -2,6 +2,7 @@ package com.salekseev.booksmarket.service.impl;
 
 import com.salekseev.booksmarket.exception.BadRequestException;
 import com.salekseev.booksmarket.model.Book;
+import com.salekseev.booksmarket.model.BookReport;
 import com.salekseev.booksmarket.repository.AuthorRepository;
 import com.salekseev.booksmarket.repository.BookRepository;
 import com.salekseev.booksmarket.repository.ShipmentItemRepository;
@@ -84,6 +85,11 @@ class BookServiceImpl implements BookService {
         }
 
         return books;
+    }
+
+    @Override
+    public List<BookReport> getBookReports() {
+        return bookRepository.findAllWithCountSold();
     }
 
 }

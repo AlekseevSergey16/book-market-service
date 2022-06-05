@@ -1,6 +1,7 @@
 package com.salekseev.booksmarket.controller;
 
 import com.salekseev.booksmarket.model.Book;
+import com.salekseev.booksmarket.model.BookReport;
 import com.salekseev.booksmarket.service.BookService;
 import org.springframework.web.bind.annotation.*;
 
@@ -50,6 +51,11 @@ public class BookController {
         }
 
         return bookService.getBooksByAuthorId(authorId.get());
+    }
+
+    @GetMapping("/report")
+    public List<BookReport> getBookReports() {
+         return bookService.getBookReports();
     }
 
     @PutMapping

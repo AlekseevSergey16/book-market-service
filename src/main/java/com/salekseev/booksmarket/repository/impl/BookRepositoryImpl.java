@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
@@ -170,19 +171,28 @@ class BookRepositoryImpl implements BookRepository {
     public List<BookReport> findAllSoldByMonth() {
         var sql = "SELECT * FROM select_book_by_month(?, ?)";
 
-        RowMapper<BookReport> mapper = (rs, rowNum) -> BookReport.builder()
-                .id(rs.getLong("book_id"))
-                .title(rs.getString("title"))
-                .cost(rs.getDouble("cost"))
-                .countSold(rs.getInt("count_sold"))
-                .genre(Genre.builder()
-                        .id(rs.getLong("genre_id"))
-                        .name(rs.getString("genre_name"))
-                        .build())
-                .totalCostSold(rs.getDouble("cost") * rs.getInt("count_sold"))
-                .build();
+        return jdbcTemplate.getJdbcOperations().query(sql, bookReportMapper,
+                LocalDate.now().minusMonths(1), LocalDate.now().plusDays(1));
+    }
 
-        return jdbcTemplate.getJdbcOperations().query(sql, mapper, LocalDate.now().minusMonths(1), LocalDate.now());
+    @Override
+    public List<BookReport> findAllWithCountSold() {
+        var sql = """
+                SELECT
+                    order_item.book_id,
+                    book.title,
+                    book.genre_id,
+                    genre.name AS genre_name,
+                    book.cost,
+                    sum(quantity) AS count_sold
+                FROM order_item
+                         INNER JOIN orders ON order_item.order_id = orders.id
+                         INNER JOIN book ON order_item.book_id = book.id
+                         INNER JOIN genre ON book.genre_id = genre.id
+                GROUP BY order_item.book_id, book.title, book.cost, book.genre_id, genre.name
+                """;
+
+        return jdbcTemplate.getJdbcOperations().query(sql, bookReportMapper);
     }
 
     @Override
@@ -291,5 +301,17 @@ class BookRepositoryImpl implements BookRepository {
                         .build())
                 .build();
     }
+
+    private RowMapper<BookReport> bookReportMapper = (rs, rowNum) -> BookReport.builder()
+            .id(rs.getLong("book_id"))
+            .title(rs.getString("title"))
+            .cost(rs.getDouble("cost"))
+            .countSold(rs.getInt("count_sold"))
+            .genre(Genre.builder()
+                    .id(rs.getLong("genre_id"))
+                    .name(rs.getString("genre_name"))
+                    .build())
+            .totalCostSold(rs.getDouble("cost") * rs.getInt("count_sold"))
+            .build();
 
 }

@@ -19,6 +19,7 @@ public interface BookRepository {
     List<Book> findByGenreId(long genreId);
     List<Book> findAllByAmountNotNull();
     List<BookReport> findAllSoldByMonth();
+    List<BookReport> findAllWithCountSold();
 
     boolean checkExistByPublisherId(long publisherId);
 

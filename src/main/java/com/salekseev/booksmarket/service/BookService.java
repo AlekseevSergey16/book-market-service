@@ -1,6 +1,7 @@
 package com.salekseev.booksmarket.service;
 
 import com.salekseev.booksmarket.model.Book;
+import com.salekseev.booksmarket.model.BookReport;
 
 import java.util.List;
 
@@ -15,5 +16,6 @@ public interface BookService {
     List<Book> getBooksByAuthorId(long authorId);
     List<Book> getBooksByGenreId(long genreId);
     List<Book> getAvailabilityBooks();
+    List<BookReport> getBookReports();
 
 }

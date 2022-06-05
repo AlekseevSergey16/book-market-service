@@ -5,6 +5,7 @@ import com.salekseev.booksmarket.service.OrderService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/orders")
@@ -22,7 +23,11 @@ public class OrderController {
     }
 
     @GetMapping
-    public List<Order> getAllOrders() {
+    public List<Order> getAllOrders(@RequestParam Optional<Long> userId) {
+        if (userId.isPresent()) {
+            return orderService.getOrdersByUserId(userId.get());
+        }
+
         return orderService.getAllOrders();
     }
 
