@@ -22,6 +22,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springdoc:springdoc-openapi-ui:1.6.6'
+    // https://mvnrepository.com/artifact/net.sf.jasperreports/jasperreports
+    implementation 'net.sf.jasperreports:jasperreports:6.9.0'
+    implementation group: 'com.lowagie', name: 'itext', version: '2.1.7'
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'org.postgresql:postgresql'
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'

@@ -12,6 +12,7 @@ public class Order {
 
     private Long id;
     private LocalDateTime orderDate;
+
     private List<OrderItem> items;
     private Double totalCost;
 

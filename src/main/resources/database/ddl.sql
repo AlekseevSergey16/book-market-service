@@ -42,7 +42,9 @@ create table book_author (
 create table orders (
     id bigserial primary key,
     order_date timestamp,
-    total_cost decimal
+    total_cost decimal,
+    user_id bigint,
+    foreign key (user_id) references users(id)
 );
 
 create table order_item (
@@ -101,6 +103,12 @@ create table order_item (
     quantity int,
     foreign key (order_id) references orders (id),
     foreign key (book_id) references book (id)
+);
+
+create table users (
+    id bigserial primary key,
+    username varchar(255) not null,
+    password varchar(255) not null
 );
 
 

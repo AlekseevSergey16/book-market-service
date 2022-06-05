@@ -1,6 +1,7 @@
 package com.salekseev.booksmarket.repository;
 
 import com.salekseev.booksmarket.model.Book;
+import com.salekseev.booksmarket.model.BookReport;
 import com.salekseev.booksmarket.model.Genre;
 
 import java.util.List;
@@ -17,6 +18,7 @@ public interface BookRepository {
     List<Book> findByAuthorId(long authorId);
     List<Book> findByGenreId(long genreId);
     List<Book> findAllByAmountNotNull();
+    List<BookReport> findAllSoldByMonth();
 
     boolean checkExistByPublisherId(long publisherId);
 

@@ -1,9 +1,6 @@
 package com.salekseev.booksmarket.repository.impl;
 
-import com.salekseev.booksmarket.model.Author;
-import com.salekseev.booksmarket.model.Book;
-import com.salekseev.booksmarket.model.Genre;
-import com.salekseev.booksmarket.model.Publisher;
+import com.salekseev.booksmarket.model.*;
 import com.salekseev.booksmarket.repository.BookRepository;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -14,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -166,6 +164,25 @@ class BookRepositoryImpl implements BookRepository {
                 """;
 
         return jdbcTemplate.getJdbcOperations().query(sql, this::bookMapper);
+    }
+
+    @Override
+    public List<BookReport> findAllSoldByMonth() {
+        var sql = "SELECT * FROM select_book_by_month(?, ?)";
+
+        RowMapper<BookReport> mapper = (rs, rowNum) -> BookReport.builder()
+                .id(rs.getLong("book_id"))
+                .title(rs.getString("title"))
+                .cost(rs.getDouble("cost"))
+                .countSold(rs.getInt("count_sold"))
+                .genre(Genre.builder()
+                        .id(rs.getLong("genre_id"))
+                        .name(rs.getString("genre_name"))
+                        .build())
+                .totalCostSold(rs.getDouble("cost") * rs.getInt("count_sold"))
+                .build();
+
+        return jdbcTemplate.getJdbcOperations().query(sql, mapper, LocalDate.now().minusMonths(1), LocalDate.now());
     }
 
     @Override

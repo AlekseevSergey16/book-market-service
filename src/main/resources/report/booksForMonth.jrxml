@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd"
+              name="employee-rpt" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
+    <property name="ireport.zoom" value="1.0"/>
+    <property name="ireport.x" value="0"/>
+    <property name="ireport.y" value="0"/>
+    <parameter name="createdBy" class="java.lang.String"/>
+    <field name="title" class="java.lang.String"/>
+    <field name="genre" class="com.salekseev.booksmarket.model.Genre"/>
+    <field name="cost" class="java.lang.Double"/>
+    <field name="countSold" class="java.lang.Integer"/>
+    <field name="totalCostSold" class="java.lang.Double"/>
+    <background>
+        <band splitType="Stretch"/>
+    </background>
+    <title>
+        <band height="42" splitType="Stretch">
+            <staticText>
+                <reportElement x="64" y="0" width="481" height="42"/>
+                <textElement textAlignment="Center">
+                    <font size="20" isBold="true" fontName="Tahoma" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Проданные книги за месяц]]></text>
+            </staticText>
+        </band>
+    </title>
+    <columnHeader>
+        <band height="61" splitType="Stretch">
+            <staticText>
+                <reportElement x="0" y="41" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="Tahoma" size="14" isBold="true" isItalic="false" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Название]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="111" y="41" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font size="12" fontName="Tahoma" isBold="true" isItalic="false" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Жанр]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="222" y="41" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font size="12" fontName="Tahoma" isBold="true" isItalic="false" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Стоимость]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="333" y="41" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font size="12" fontName="Tahoma" isBold="true" isItalic="false" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Продано]]></text>
+            </staticText>
+            <staticText>
+                <reportElement x="444" y="41" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font size="12" fontName="Tahoma" isBold="true" isItalic="false" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Сумма]]></text>
+            </staticText>
+            <textField>
+                <reportElement x="456" y="21" width="99" height="20"/>
+                <textElement><font fontName="Tahoma" pdfEncoding="Cp1251"/></textElement>
+                <textFieldExpression><![CDATA[$P{createdBy}]]></textFieldExpression>
+            </textField>
+            <staticText>
+                <reportElement x="398" y="21" width="58" height="20"/>
+                <textElement textAlignment="Center">
+                    <font fontName="Tahoma" pdfEncoding="Cp1251"/>
+                </textElement>
+                <text><![CDATA[Создано:]]></text>
+            </staticText>
+        </band>
+    </columnHeader>
+    <detail>
+        <band height="20" splitType="Stretch">
+            <textField>
+                <reportElement x="0" y="0" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="Tahoma" pdfEncoding="Cp1251"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{title}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="111" y="0" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="Tahoma" pdfEncoding="Cp1251"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{genre}.getName()]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="222" y="0" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="Tahoma" pdfEncoding="Cp1251"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{cost}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="333" y="0" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="Tahoma" pdfEncoding="Cp1251"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{countSold}]]></textFieldExpression>
+            </textField>
+            <textField>
+                <reportElement x="444" y="0" width="111" height="20"/>
+                <box>
+                    <pen lineWidth="0.25"/>
+                    <topPen lineWidth="0.25"/>
+                    <leftPen lineWidth="0.25"/>
+                    <bottomPen lineWidth="0.25"/>
+                    <rightPen lineWidth="0.25"/>
+                </box>
+                <textElement textAlignment="Center">
+                    <font fontName="Tahoma" pdfEncoding="Cp1251"/>
+                </textElement>
+                <textFieldExpression><![CDATA[$F{totalCostSold}]]></textFieldExpression>
+            </textField>
+        </band>
+    </detail>
+</jasperReport>
