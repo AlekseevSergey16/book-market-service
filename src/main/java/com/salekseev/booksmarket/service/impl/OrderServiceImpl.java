@@ -8,6 +8,7 @@ import com.salekseev.booksmarket.repository.OrderItemRepository;
 import com.salekseev.booksmarket.repository.OrderRepository;
 import com.salekseev.booksmarket.service.OrderService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -27,6 +28,7 @@ class OrderServiceImpl implements OrderService {
         this.authorRepository = authorRepository;
     }
 
+    @Transactional
     @Override
     public long addOrder(Order order) {
         if (order.getItems().isEmpty()) {

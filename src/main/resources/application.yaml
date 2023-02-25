@@ -1,6 +1,7 @@
 server:
   servlet:
     context-path: /book-market/api
+  port: 8080
 
 spring:
   datasource:

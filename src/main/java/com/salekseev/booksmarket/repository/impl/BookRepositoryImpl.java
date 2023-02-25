@@ -302,7 +302,7 @@ class BookRepositoryImpl implements BookRepository {
                 .build();
     }
 
-    private RowMapper<BookReport> bookReportMapper = (rs, rowNum) -> BookReport.builder()
+    private final RowMapper<BookReport> bookReportMapper = (rs, rowNum) -> BookReport.builder()
             .id(rs.getLong("book_id"))
             .title(rs.getString("title"))
             .cost(rs.getDouble("cost"))

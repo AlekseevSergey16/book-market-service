@@ -25,7 +25,7 @@ class PublisherRepositoryImpl implements PublisherRepository {
     public long save(Publisher publisher) {
         var sql = """
             INSERT INTO publisher (name, information, email, phone)
-            VALUES (:name, :information, :phone, :email);
+            VALUES (:name, :information, :email, :phone);
             """;
 
         var params = new MapSqlParameterSource()
