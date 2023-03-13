@@ -1,0 +1,4 @@
+docker run -it --rm --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.9-management
+docker run --name postgresql -e POSTGRES_PASSWORD=qwerty123 -p 5432:5432 -d postgres:alpine
+
+docker run --name rabbitmq -p 5672:5672 -p 15672:15672 rabbitmq:3.9-management -d

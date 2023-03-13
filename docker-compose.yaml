@@ -1,0 +1,14 @@
+version: '1.0'
+
+services:
+  postgres_db:
+    image: postgres:alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: basket-platform
+      POSTGRES_PASSWORD: qwerty123
+
+  rabbitmq:
+    image: rabbitmq
+

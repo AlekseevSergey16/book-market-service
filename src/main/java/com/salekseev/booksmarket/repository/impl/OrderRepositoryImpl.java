@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 class OrderRepositoryImpl implements OrderRepository {
@@ -60,6 +61,18 @@ class OrderRepositoryImpl implements OrderRepository {
                 WHERE user_id = ?
                 """;
         return jdbcTemplate.getJdbcOperations().query(sql, this::orderMapper, userId);
+    }
+
+    @Override
+    public Optional<Order> findById(long orderId) {
+        var sql = """
+                SELECT orders.id,
+                       orders.order_date,
+                       orders.total_cost
+                FROM orders
+                WHERE orders.id = ?
+                """;
+        return jdbcTemplate.getJdbcOperations().query(sql, this::orderMapper, orderId).stream().findAny();
     }
 
     private Order orderMapper(ResultSet rs, int rowNum) throws SQLException {

@@ -37,6 +37,18 @@ class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
+    public Optional<User> findById(long userId) {
+        var sql = """
+                SELECT id, username, password, role
+                FROM users
+                WHERE id = ?;
+                """;
+
+        return jdbcTemplate.getJdbcOperations().query(sql, this::userMapper, userId)
+                .stream().findAny();
+    }
+
+    @Override
     public Optional<User> findByUsernameAndPassword(String username, String password) {
         var sql = """
                 SELECT id, username, password, role
